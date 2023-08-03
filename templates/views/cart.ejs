@@ -1,0 +1,268 @@
+
+<!--jshint esversion:6-->
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="css/cart.css">
+</head>
+<body>
+  <h1 class="heading"><span>Your Cart</span></h1>
+
+  <% if (user.cart.length > 0) { %>
+    <div class="cart-items">
+      <% user.cart.forEach(function(item) { %>
+        <div class="cart-item">
+          <div class="book-details">
+            <img class="book-image" src="<%= item.book.image %>" alt="<%= item.book.title %>">
+            <h3 class="book-title"><%= item.book.title %></h3>
+            <p class="book-author">By <%= item.book.author %></p>
+            <p class="book-description"><%= item.book.description %></p>
+          </div>
+          <div class="due-date">
+            <p>Due Date: <%= item.dueDate.toDateString() %></p>
+          </div>
+          <button class="remove-btn" onclick="removeFromCart('<%= item.book._id %>')">Remove from Cart</button>
+        </div>
+      <% }); %>
+    </div>
+  <% } else { %>
+    <p class="empty-cart">Your cart is empty</p>
+  <% } %>
+  
+  <script>
+    var cartData = <%- JSON.stringify(user.cart) %>;
+
+    function removeFromCart(bookId) {
+  console.log('Removing book:', bookId);
+
+  fetch(`/cart/remove/${encodeURIComponent(bookId)}`, {
+    method: 'DELETE',
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Response data:', data);
+    if (data.success) {
+      // Update the cartData array with the updated cart from the response
+      cartData = data.cart;
+      console.log('Updated cartData:', cartData);
+
+      // Render the cart with the updated cartData
+      renderCart(cartData);
+    } else {
+      console.error('Error removing item from cart:', data.error);
+    }
+  })
+  .catch(error => {
+    console.error('Error removing item from cart:', error);
+  });
+}
+
+    function renderCart() {
+      var cartItemsDiv = document.querySelector('.cart-items');
+      var emptyCartMsg = document.querySelector('.empty-cart');
+
+      if (cartData.length > 0) {
+        cartItemsDiv.innerHTML = '';
+         
+        var dueDateDiv;
+        cartData.forEach(function (item) {
+          var cartItemDiv = document.createElement('div');
+          cartItemDiv.classList.add('cart-item');
+          var bookDetailsDiv = document.createElement('div');
+      bookDetailsDiv.classList.add('book-details');
+
+      var bookImage = document.createElement('img');
+      bookImage.classList.add('book-image');
+      bookImage.src = item.book.image;
+      bookImage.alt = item.book.title;
+      bookDetailsDiv.appendChild(bookImage);
+
+      var bookTitle = document.createElement('h3');
+      bookTitle.classList.add('book-title');
+      bookTitle.textContent = item.book.title;
+      bookDetailsDiv.appendChild(bookTitle);
+
+      var bookAuthor = document.createElement('p');
+      bookAuthor.classList.add('book-author');
+      bookAuthor.textContent = 'By ' + item.book.author;
+      bookDetailsDiv.appendChild(bookAuthor);
+
+      var bookDescription = document.createElement('p');
+      bookDescription.classList.add('book-description');
+      bookDescription.textContent = item.book.description;
+      bookDetailsDiv.appendChild(bookDescription);
+
+      cartItemDiv.appendChild(bookDetailsDiv);
+      dueDateDiv = document.createElement('div'); 
+     
+      var dueDate = document.createElement('p');
+if (item.dueDate && !isNaN(Date.parse(item.dueDate))) {
+  dueDate.textContent = 'Due Date: ' + new Date(item.dueDate).toDateString();
+} else {
+  dueDate.textContent = 'Invalid Due Date';
+}
+dueDateDiv.appendChild(dueDate);
+
+      cartItemDiv.appendChild(dueDateDiv);
+
+      var removeBtn = document.createElement('button');
+      removeBtn.classList.add('remove-btn');
+      removeBtn.textContent = 'Remove from Cart';
+      removeBtn.onclick = function () {
+        removeFromCart(item.book._id);
+      };
+      cartItemDiv.appendChild(removeBtn);
+
+      cartItemsDiv.appendChild(cartItemDiv);
+          // Rest of the code...
+
+        });
+
+        if (emptyCartMsg) {
+          emptyCartMsg.style.display = 'none';
+        }
+      } else {
+        cartItemsDiv.innerHTML = '';
+        if (emptyCartMsg) {
+          emptyCartMsg.style.display = 'block';
+        }
+      }
+    }
+
+    renderCart();
+  </script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="css/cart.css">
+</head>
+<body>
+  <h1 class="heading"><span>Your Cart</span></h1>
+
+  <% if (user.cart.length > 0) { %>
+    <div class="cart-items">
+      <% user.cart.forEach(function(item) { %>
+        <div class="cart-item">
+          <div class="book-details">
+            <img class="book-image" src="<%= item.book.image %>" alt="<%= item.book.title %>">
+            <h3 class="book-title"><%= item.book.title %></h3>
+            <p class="book-author">By <%= item.book.author %></p>
+            <p class="book-description"><%= item.book.description %></p>
+          </div>
+          <div class="due-date">
+            <p>Due Date: <%= item.dueDate.toDateString() %></p>
+          </div>
+          <button class="remove-btn" onclick="removeFromCart('<%= item.book._id %>')">Remove from Cart</button>
+        </div>
+      <% }); %>
+    </div>
+  <% } else { %>
+    <p class="empty-cart">Your cart is empty</p>
+  <% } %>
+  
+  <script>
+    var cartData = <%- JSON.stringify(user.cart) %>;
+
+    function removeFromCart(bookId) {
+      console.log('Removing book:', bookId);
+
+      fetch(`/cart/remove/${encodeURIComponent(bookId)}`, {
+        method: 'DELETE',
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Response data:', data);
+        if (data.success) {
+          // Update the cartData array with the updated cart from the response
+          cartData = data.cart;
+          console.log('Updated cartData:', cartData);
+
+          // Render the cart with the updated cartData
+          renderCart();
+        } else {
+          console.error('Error removing item from cart:', data.error);
+        }
+      })
+      .catch(error => {
+        console.error('Error removing item from cart:', error);
+      });
+    }
+
+    function renderCart() {
+      var cartItemsDiv = document.querySelector('.cart-items');
+      var emptyCartMsg = document.querySelector('.empty-cart');
+
+      if (cartData.length > 0) {
+        cartItemsDiv.innerHTML = '';
+
+        cartData.forEach(function (item) {
+          var cartItemDiv = document.createElement('div');
+          cartItemDiv.classList.add('cart-item');
+
+          var bookDetailsDiv = document.createElement('div');
+          bookDetailsDiv.classList.add('book-details');
+
+          var bookImage = document.createElement('img');
+          bookImage.classList.add('book-image');
+          bookImage.src = item.book.image;
+          bookImage.alt = item.book.title;
+          bookDetailsDiv.appendChild(bookImage);
+
+          var bookTitle = document.createElement('h3');
+          bookTitle.classList.add('book-title');
+          bookTitle.textContent = item.book.title;
+          bookDetailsDiv.appendChild(bookTitle);
+
+          var bookAuthor = document.createElement('p');
+          bookAuthor.classList.add('book-author');
+          bookAuthor.textContent = 'By ' + item.book.author;
+          bookDetailsDiv.appendChild(bookAuthor);
+
+          var bookDescription = document.createElement('p');
+          bookDescription.classList.add('book-description');
+          bookDescription.textContent = item.book.description;
+          bookDetailsDiv.appendChild(bookDescription);
+
+          cartItemDiv.appendChild(bookDetailsDiv);
+
+          var dueDateDiv = document.createElement('div');
+          dueDateDiv.classList.add('due-date');
+
+          var dueDate = document.createElement('p');
+          if (item.dueDate && !isNaN(Date.parse(item.dueDate))) {
+            dueDate.textContent = 'Due Date: ' + new Date(item.dueDate).toDateString();
+          } else {
+            dueDate.textContent = 'Invalid Due Date';
+          }
+          dueDateDiv.appendChild(dueDate);
+
+          cartItemDiv.appendChild(dueDateDiv);
+
+          var removeBtn = document.createElement('button');
+          removeBtn.classList.add('remove-btn');
+          removeBtn.textContent = 'Remove from Cart';
+          removeBtn.onclick = function () {
+            removeFromCart(item.book._id);
+          };
+          cartItemDiv.appendChild(removeBtn);
+
+          cartItemsDiv.appendChild(cartItemDiv);
+        });
+
+        if (emptyCartMsg) {
+          emptyCartMsg.style.display = 'none';
+        }
+      } else {
+        cartItemsDiv.innerHTML = '';
+        if (emptyCartMsg) {
+          emptyCartMsg.style.display = 'block';
+        }
+      }
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>
